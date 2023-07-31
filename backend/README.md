@@ -1,6 +1,6 @@
 # TodoList-Reactjs-FastAPI
-python -m venv myenv
-.\myenv\Scripts\activate
+python -m venv env
+.\env\Scripts\activate
 
 pip install fastapi pymongo uvicorn python-dotenv
 
