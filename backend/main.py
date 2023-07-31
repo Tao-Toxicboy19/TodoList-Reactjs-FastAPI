@@ -3,10 +3,20 @@ from pymongo import MongoClient
 from pydantic import BaseModel
 from bson.objectid import ObjectId
 from datetime import date,datetime
+import os
+from dotenv import load_dotenv
 
 app = FastAPI()
 
-client = MongoClient("mongodb://thewarat19:LSSCCdxCjtW3Myf4@ac-m5iasjm-shard-00-00.gnbfgkb.mongodb.net:27017,ac-m5iasjm-shard-00-01.gnbfgkb.mongodb.net:27017,ac-m5iasjm-shard-00-02.gnbfgkb.mongodb.net:27017/todolist_reactjs_fastapi?ssl=true&replicaSet=atlas-tu358i-shard-0&authSource=admin&retryWrites=true&w=majority")
+load_dotenv()
+
+mongo_url = os.environ.get('MONGO_URL')
+# client = MongoClient("mongodb://thewarat19:LSSCCdxCjtW3Myf4@ac-m5iasjm-shard-00-00.gnbfgkb.mongodb.net:27017,ac-m5iasjm-shard-00-01.gnbfgkb.mongodb.net:27017,ac-m5iasjm-shard-00-02.gnbfgkb.mongodb.net:27017/todolist_reactjs_fastapi?ssl=true&replicaSet=atlas-tu358i-shard-0&authSource=admin&retryWrites=true&w=majority")
+
+if mongo_url is None:
+    raise ValueError("MongoDB URL is not set in the environment variables.")
+
+client = MongoClient(mongo_url)
 
 db = client["todolist_reactjs_fastapi"]
 collection = db["todo"]
