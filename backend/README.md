@@ -6,3 +6,6 @@ pip install fastapi pymongo uvicorn
 
 # run server
 uvicorn main:app --reload
+
+# exit (myenv)
+deactivate
