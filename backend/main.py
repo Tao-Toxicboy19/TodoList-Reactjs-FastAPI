@@ -5,8 +5,18 @@ from bson.objectid import ObjectId
 from datetime import date,datetime
 import os
 from dotenv import load_dotenv
-
+from fastapi.middleware.cors import CORSMiddleware
+    
 app = FastAPI()
+
+# การกำหนดการอนุญาตให้เกิด CORS ที่เซิร์ฟเวอร์ API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # ให้เปิดให้ใช้งานจากทุก Origin หรือคุณอาจระบุ Origin ที่เฉพาะเจาะจง
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 load_dotenv()
 
