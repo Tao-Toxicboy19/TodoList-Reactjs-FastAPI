@@ -5,3 +5,7 @@ python -m venv env
 
 pip install fastapi
 pip install uvicorn
+pip install pymongo
+
+run server
+uvicorn main:app --reload
