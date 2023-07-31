@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\projects\reactjs-fastapi-todolist\backend\myenv"
+VIRTUAL_ENV="D:\projects\TodoList-Reactjs-FastAPI\backend\myenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
