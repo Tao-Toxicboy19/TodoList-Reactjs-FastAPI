@@ -29,30 +29,64 @@ async def create_todo_list(todo: TodoList):
 
     result = collection.insert_one(todo_data)
     return {
-        "input": todo.dict(),
+        "title": todo.title,
+        "desc": todo.desc,
         "due_date": current_time,
         "id": str(result.inserted_id),
     }
 
+# All-todos
+@app.get("/all-todos/")
+async def read_all_todo_lists():
+    all_todos = []
+    for todo in collection.find():
+        all_todos.append({
+            "id": str(todo["_id"]),
+            "title": todo["title"],
+            "desc": todo["desc"]
+        })
+    return all_todos
+
 # Read
+
 @app.get("/todo/{id}")
-async def readTodoList(id:str):
-    todo = collection.find_one({"_id":ObjectId(id)})
+async def read_todo_list(id: str):
+    todo = collection.find_one({"_id": ObjectId(id)})
     if todo: 
-        return {"id":str(todo["_id"]),"title":todo["title"],"desc":todo["desc"]}
+        todo_data = {
+            "id": str(todo["_id"]),
+            "title": todo["title"],
+            "desc": todo["desc"],
+            "due_date": todo.get("due_date"),
+        }
+        return todo_data
     else:
-        raise HTTPException(status_code=404,detail="Todo not found")
+        raise HTTPException(status_code=404, detail="Todo not found")
     
 # Update
 @app.put("/todo/{id}")
-async def updateTodoList(id:str,todo:TodoList):
-    result = collection.update_one(
-        {"_id":ObjectId(id)},{"$set":todo.dict(exclude_unset=True)}
-    )
-    if result.modified_count ==1:
-        return{"id":id,"title":todo.title,"desc":todo.desc}
+async def update_todo_list(id: str, todo: TodoList):
+    existing_todo = collection.find_one({"_id": ObjectId(id)})
+    
+    if "due_date" in todo.dict():
+        due_date = todo.due_date
     else:
-        raise HTTPException(status_code=404,detail="Todo not found")
+        due_date = existing_todo.get("due_date")
+
+    result = collection.update_one(
+        {"_id": ObjectId(id)},
+        {"$set": todo.dict(exclude_unset=True)}
+    )
+
+    if result.matched_count == 1:
+        return {
+            "id": id,
+            "title": todo.title,
+            "desc": todo.desc,
+            "due_date": due_date,
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Todo not found")
     
 # Delete
 @app.delete("/todo/{id}")
