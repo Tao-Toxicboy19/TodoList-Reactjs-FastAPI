@@ -36,7 +36,7 @@ class TodoList(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message":"Hello Guys"}
+    return {"message":"Hello Guyss"}
 
 # Create
 @app.post("/create/")
