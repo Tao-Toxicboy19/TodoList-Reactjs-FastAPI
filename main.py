@@ -2,10 +2,12 @@ from fastapi import FastAPI ,HTTPException
 from pymongo import MongoClient
 from pydantic import BaseModel
 from bson.objectid import ObjectId
+from datetime import date,datetime
 
 app = FastAPI()
 
 client = MongoClient("mongodb://thewarat19:LSSCCdxCjtW3Myf4@ac-m5iasjm-shard-00-00.gnbfgkb.mongodb.net:27017,ac-m5iasjm-shard-00-01.gnbfgkb.mongodb.net:27017,ac-m5iasjm-shard-00-02.gnbfgkb.mongodb.net:27017/todolist_reactjs_fastapi?ssl=true&replicaSet=atlas-tu358i-shard-0&authSource=admin&retryWrites=true&w=majority")
+
 db = client["todolist_reactjs_fastapi"]
 collection = db["todo"]
 
@@ -13,19 +15,23 @@ class TodoList(BaseModel):
     title: str
     desc: str
 
-
 @app.get("/")
 async def root():
-    return {"message":"Hello World"}
+    return {"message":"Hello Guys"}
 
 # Create
 @app.post("/create/")
-async def createTodoList(todo:TodoList):
-    result = collection.insert_one(todo.dict())
+async def create_todo_list(todo: TodoList):
+    # เพิ่มเวลาปัจจุบันใน JSON response
+    current_time = datetime.now()
+    todo_data = todo.dict()
+    todo_data["due_date"] = current_time
+
+    result = collection.insert_one(todo_data)
     return {
+        "input": todo.dict(),
+        "due_date": current_time,
         "id": str(result.inserted_id),
-        "title": todo.title,
-        "desc": todo.desc
     }
 
 # Read
