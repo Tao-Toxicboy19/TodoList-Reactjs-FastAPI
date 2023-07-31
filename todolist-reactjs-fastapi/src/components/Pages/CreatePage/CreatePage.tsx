@@ -11,7 +11,6 @@ export default function TodolistPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState<{
     [id: string]: boolean;
   }>({});
