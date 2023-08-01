@@ -1,9 +1,6 @@
 import axios from "axios";
+import { Props } from "../../../types/Todo.type";
 
-type Props = {
-  id: string;
-  onDeleteTodo: (id: string) => void; // เพิ่ม prop สำหรับการลบ Todo ใน AllTodoPage
-};
 
 export default function DeleteTodo({ id, onDeleteTodo }: Props) {
   const handleDelete = () => {

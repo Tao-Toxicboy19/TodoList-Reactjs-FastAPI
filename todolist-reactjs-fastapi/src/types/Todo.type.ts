@@ -3,3 +3,8 @@ export interface Todo {
     title: string;
     desc: string;
 };
+
+export type Props = {
+    id: string;
+    onDeleteTodo: (id: string) => void;
+};
