@@ -9,13 +9,20 @@ from fastapi.middleware.cors import CORSMiddleware
     
 app = FastAPI()
 
-# การกำหนดการอนุญาตให้เกิด CORS ที่เซิร์ฟเวอร์ API
+# # การกำหนดการอนุญาตให้เกิด CORS ที่เซิร์ฟเวอร์ API
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"], # ให้เปิดให้ใช้งานจากทุก Origin หรือคุณอาจระบุ Origin ที่เฉพาะเจาะจง
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+# ตั้งค่า CORS เพื่ออนุญาตให้ frontend ที่อยู่ที่อื่นสามารถเรียกใช้งาน API ของคุณได้
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # ให้เปิดให้ใช้งานจากทุก Origin หรือคุณอาจระบุ Origin ที่เฉพาะเจาะจง
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],  # ใส่ URL ของ frontend ที่อยู่ที่อื่นในลิสต์นี้หากต้องการระบุเฉพาะ URL ที่อนุญาต
+    allow_methods=["*"],  # ระบุเมธอดที่อนุญาต (GET, POST, PUT, DELETE, เป็นต้น)
+    allow_headers=["*"],  # อนุญาตให้ส่ง header ใน request
 )
 
 load_dotenv()
@@ -108,7 +115,7 @@ async def update_todo_list(id: str, todo: TodoList):
         raise HTTPException(status_code=404, detail="Todo not found")
     
 # Delete
-@app.delete("/todo/{id}")
+@app.delete("/delete/{id}")
 async def deleteTodoList(id:str):
     result = collection.delete_one({"_id":ObjectId(id)})
     if result.deleted_count == 1:
